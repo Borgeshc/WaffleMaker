@@ -14,6 +14,8 @@ public class Hunger : MonoBehaviour
     public float waffleAmount;
     [Range(.01f, 1), Tooltip("How much will the hunger bar go down everytime the person gets hungry.")]
     public float hungerAmount;
+    [HideInInspector]
+    public float hungerValue;
 
     Animator anim;
     int hungerTime;
@@ -24,6 +26,7 @@ public class Hunger : MonoBehaviour
     {
         hungerTime = Random.Range(minHungerTime, maxHungerTime);
         anim = GetComponent<Animator>();
+        hungerValue = hungerBar.fillAmount;
     }
 	void Update ()
     {
@@ -38,6 +41,7 @@ public class Hunger : MonoBehaviour
     {
         isStarving = true;
         hungerBar.fillAmount = hungerBar.fillAmount - hungerAmount;
+        hungerValue = hungerBar.fillAmount;
         yield return new WaitForSeconds(1);
         hungerTime = Random.Range(minHungerTime, maxHungerTime);
         isStarving = false;

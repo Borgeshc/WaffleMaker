@@ -25,7 +25,13 @@ public class WaffleTimer : MonoBehaviour {
         if (Input.GetKey(KeyCode.Space))
             cooking = true;
         else
-        {            
+        {
+            if(cooked)
+            {
+                GetComponent<WaffleManager>().WaffleReady();
+            }
+
+            cooked = false;
             time = 0;
             overcookedTime = 0;
             runningTimer = false;
@@ -33,7 +39,6 @@ public class WaffleTimer : MonoBehaviour {
             overCooked = false;
             StopAllCoroutines();
             cooking = false;
-
         }
 
 	    if(cooking)
@@ -52,7 +57,7 @@ public class WaffleTimer : MonoBehaviour {
         if(!runningTimer)
         {
             runningTimer = true;
-            time = Random.Range(5, 15);
+            time = Random.Range(2, 7);
             overcookedTime = time + 5;
             //for(int i = overcookedTime; i > 0; i--)
             while(cooking)
