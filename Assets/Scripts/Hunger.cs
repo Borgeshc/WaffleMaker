@@ -5,6 +5,9 @@ using UnityEngine.UI;
 public class Hunger : MonoBehaviour
 {
     public Image hungerBar;
+    public AudioClip deathSound;
+
+    AudioSource source;
     public GameObject eyes;
     [Range(1,10)]
     public int minHungerTime;
@@ -18,11 +21,14 @@ public class Hunger : MonoBehaviour
     Animator anim;
     int hungerTime;
     float timer;
-    bool isStarving;        
-            
+    bool isStarving;
+    bool deathSoundPlayed;        
+
     void Start()
     {
         hungerTime = Random.Range(minHungerTime, maxHungerTime);
+        source = GetComponent<AudioSource>();
+        source.clip = deathSound;
         anim = GetComponent<Animator>();
     }
 	void Update ()
@@ -46,6 +52,11 @@ public class Hunger : MonoBehaviour
         {
             eyes.SetActive(true);
             anim.SetBool("died", true);
+            if(!deathSoundPlayed)
+            {
+                source.Play();
+                deathSoundPlayed = true;
+            }
             Destroy(gameObject, 7);
         }
     }
