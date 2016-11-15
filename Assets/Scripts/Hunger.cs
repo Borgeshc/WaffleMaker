@@ -6,6 +6,8 @@ public class Hunger : MonoBehaviour
 {
     public Image hungerBar;
     public GameObject eyes;
+    public AudioClip deathSound;
+
     [Range(1,10)]
     public int minHungerTime;
     [Range(1,10)]
@@ -17,15 +19,21 @@ public class Hunger : MonoBehaviour
     [HideInInspector]
     public float hungerValue;
 
+    AudioSource source;
     Animator anim;
     int hungerTime;
     float timer;
-    bool isStarving;        
-            
+    bool isStarving;
+
+    bool deathSoundPlayed;
+
     void Start()
     {
         hungerTime = Random.Range(minHungerTime, maxHungerTime);
         anim = GetComponent<Animator>();
+
+        source = GetComponent<AudioSource>();
+        source.clip = deathSound;
         hungerValue = hungerBar.fillAmount;
     }
 	void Update ()
@@ -50,6 +58,11 @@ public class Hunger : MonoBehaviour
         {
             eyes.SetActive(true);
             anim.SetBool("died", true);
+            if (!deathSoundPlayed)
+            {
+                source.Play();
+                deathSoundPlayed = true;
+            }
             Destroy(gameObject, 7);
         }
     }
