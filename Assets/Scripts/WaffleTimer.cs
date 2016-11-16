@@ -3,7 +3,8 @@ using UnityEngineInternal;
 using System.Collections;
 
 public class WaffleTimer : MonoBehaviour {
-
+    public AudioClip dingSound;
+    AudioSource source;
     bool runningTimer;
     bool cooking;
     bool cooked;
@@ -14,13 +15,18 @@ public class WaffleTimer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        source = GetComponent<AudioSource>();
+        if(source == null)
+        {
+            source = gameObject.AddComponent<AudioSource>();
+            source.playOnAwake = false;
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        print("Cooking: " + cooking);
-        print("Time: " + time);
+        //print("Cooking: " + cooking);
+        //print("Time: " + time);
 
         if (Input.GetKey(KeyCode.Space))
             cooking = true;
@@ -62,21 +68,21 @@ public class WaffleTimer : MonoBehaviour {
             //for(int i = overcookedTime; i > 0; i--)
             while(cooking)
             {
-                print("Time Cooked: " + timeCooked);
+                //print("Time Cooked: " + timeCooked);
                 if (timeCooked >= time && timeCooked < overcookedTime)
                 {
                     cooked = true;
-                    print("Waffle Cooked");
+                    source.PlayOneShot(dingSound);
                 }
                 else if (timeCooked <= time)
                 {
                     cooked = false;
-                    print("Waffle Undercooked");
+                    //print("Waffle Undercooked");
                 }
                 else if (timeCooked > overcookedTime)
                 {
                     overCooked = true;
-                    print("Waffle Overcooked");
+                    //print("Waffle Overcooked");
                 }
                 yield return new WaitForSeconds(1f);
                 timeCooked++;
