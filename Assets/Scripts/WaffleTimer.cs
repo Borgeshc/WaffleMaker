@@ -3,6 +3,8 @@ using UnityEngineInternal;
 using System.Collections;
 
 public class WaffleTimer : MonoBehaviour {
+    public GameObject wafflePrefab;
+    public GameObject wafflePourPanel;
     public AudioClip dingSound;
     AudioSource source;
     bool runningTimer;

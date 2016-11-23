@@ -24,18 +24,17 @@ public class Hunger : MonoBehaviour
     int hungerTime;
     float timer;
     bool isStarving;
-
     bool deathSoundPlayed;
 
     void Start()
     {
         hungerTime = Random.Range(minHungerTime, maxHungerTime);
         anim = GetComponent<Animator>();
-
         source = GetComponent<AudioSource>();
         source.clip = deathSound;
         hungerValue = hungerBar.fillAmount;
     }
+
 	void Update ()
     {
         timer = (int)Time.time;
@@ -45,6 +44,7 @@ public class Hunger : MonoBehaviour
             StartCoroutine(Starving());
         }
 	}
+
     IEnumerator Starving()
     {
         isStarving = true;
