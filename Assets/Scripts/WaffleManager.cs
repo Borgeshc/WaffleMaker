@@ -5,13 +5,13 @@ using System.Collections.Generic;
 public class WaffleManager : MonoBehaviour
 {
     public List<GameObject> familyMembers;
+    public GameObject waffle;
     int chooseMember;
     float lowestHunger = 1;
 
     public void WaffleReady()
     {
         CheckHunger();
-        //Reset();
 
         for (int i = 0; i < familyMembers.Count; i++)
         {
@@ -30,6 +30,8 @@ public class WaffleManager : MonoBehaviour
     {
         chooseMember = 0;
         lowestHunger = 1;
+        Destroy(waffle);
+        waffle = null;
     }
 
     void CheckHunger()
