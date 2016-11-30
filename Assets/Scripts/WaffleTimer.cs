@@ -3,7 +3,11 @@ using UnityEngineInternal;
 using System.Collections;
 
 public class WaffleTimer : MonoBehaviour {
+    public GameObject wafflePrefab;
+    public GameObject wafflePourPanel;
+    public GameObject waffleContainer;
     public AudioClip dingSound;
+    public Animator wafflePourPanelAnimator;
     AudioSource source;
     bool runningTimer;
     bool cooking;
@@ -12,6 +16,7 @@ public class WaffleTimer : MonoBehaviour {
     int time;
     int overcookedTime;
     int timeCooked;
+    GameObject currentWaffle;
 
 	// Use this for initialization
 	void Start () {
@@ -27,22 +32,32 @@ public class WaffleTimer : MonoBehaviour {
 	void Update () {
         //print("Cooking: " + cooking);
         //print("Time: " + time);
-
         if (Input.GetKey(KeyCode.Space))
-            cooking = true;
-        else
         {
-            if(cooked)
+            if(currentWaffle == null)
             {
-                GetComponent<WaffleManager>().WaffleReady();
+                wafflePourPanelAnimator.Play("WafflePouring");
+                currentWaffle = Instantiate(wafflePrefab, waffleContainer.transform) as GameObject;
+                time = Random.Range(2, 7);
+                overcookedTime = time + 5;
             }
 
-            cooked = false;
-            time = 0;
-            overcookedTime = 0;
+            cooking = true;
+        }
+        else
+        {
+            if (cooked)
+            {
+                GetComponent<WaffleManager>().WaffleReady();
+                currentWaffle = null;
+                cooked = false;
+                time = 0;
+                overcookedTime = 0;                
+                timeCooked = 0;
+                overCooked = false;                
+            }
+
             runningTimer = false;
-            timeCooked = 0;
-            overCooked = false;
             StopAllCoroutines();
             cooking = false;
         }
@@ -63,26 +78,27 @@ public class WaffleTimer : MonoBehaviour {
         if(!runningTimer)
         {
             runningTimer = true;
-            time = Random.Range(2, 7);
-            overcookedTime = time + 5;
+            
             //for(int i = overcookedTime; i > 0; i--)
             while(cooking)
             {
                 //print("Time Cooked: " + timeCooked);
-                if (timeCooked >= time && timeCooked < overcookedTime)
+                if (timeCooked >= time && timeCooked < overcookedTime)      //waffle is cooked
                 {
                     cooked = true;
                     source.PlayOneShot(dingSound);
+                    currentWaffle.GetComponent<WaffleStatus>().currentStatus = WaffleStatus.Status.Cooked;
+                    GetComponent<WaffleManager>().waffle = currentWaffle;
                 }
-                else if (timeCooked <= time)
+                else if (timeCooked <= time)                                //waffle is undercooked
                 {
                     cooked = false;
-                    //print("Waffle Undercooked");
                 }
-                else if (timeCooked > overcookedTime)
+                else if (timeCooked > overcookedTime)                       //waffle is overcooked
                 {
                     overCooked = true;
-                    //print("Waffle Overcooked");
+                    currentWaffle.GetComponent<WaffleStatus>().currentStatus = WaffleStatus.Status.Overcooked;
+                    GetComponent<WaffleManager>().waffle = currentWaffle;
                 }
                 yield return new WaitForSeconds(1f);
                 timeCooked++;
