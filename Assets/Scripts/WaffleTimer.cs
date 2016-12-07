@@ -7,7 +7,6 @@ public class WaffleTimer : MonoBehaviour {
     public GameObject wafflePourPanel;
     public GameObject waffleContainer;
     public AudioClip dingSound;
-    public AudioClip sizzle;
     public Animator wafflePourPanelAnimator;
     AudioSource source;
     bool runningTimer;
@@ -35,13 +34,9 @@ public class WaffleTimer : MonoBehaviour {
         //print("Time: " + time);
         if (ArduinoSerial.isPressed)
         {
-
             if(currentWaffle == null)
             {
-                source.clip = sizzle;
-                source.Play();
-                wafflePourPanelAnimator.SetBool("isPouring", true);
-
+                wafflePourPanelAnimator.Play("WafflePouring");
                 currentWaffle = Instantiate(wafflePrefab, waffleContainer.transform) as GameObject;
                 time = Random.Range(2, 7);
                 overcookedTime = time + 5;
@@ -54,7 +49,6 @@ public class WaffleTimer : MonoBehaviour {
             if (cooked)
             {
                 GetComponent<WaffleManager>().WaffleReady();
-                wafflePourPanelAnimator.SetBool("isPouring", false);
                 currentWaffle = null;
                 cooked = false;
                 time = 0;

@@ -25,11 +25,9 @@ public class Hunger : MonoBehaviour
     float timer;
     bool isStarving;
     bool deathSoundPlayed;
-    WaffleManager waffleManager;
 
     void Start()
     {
-        waffleManager = GameObject.Find("WaffleManager").GetComponent<WaffleManager>();
         hungerTime = Random.Range(minHungerTime, maxHungerTime);
         anim = GetComponent<Animator>();
         source = GetComponent<AudioSource>();
@@ -56,9 +54,8 @@ public class Hunger : MonoBehaviour
         hungerTime = Random.Range(minHungerTime, maxHungerTime);
         isStarving = false;
 
-        if(hungerBar.fillAmount <= .15f)
+        if(hungerBar.fillAmount <= 0)
         {
-            waffleManager.familyMembers.Remove(gameObject);
             eyes.SetActive(true);
             anim.SetBool("died", true);
             if (!deathSoundPlayed)

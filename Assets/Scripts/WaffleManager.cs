@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 public class WaffleManager : MonoBehaviour
 {
@@ -12,13 +11,13 @@ public class WaffleManager : MonoBehaviour
 
     public void WaffleReady()
     {
-       // CheckHunger();
+        CheckHunger();
 
         for (int i = 0; i < familyMembers.Count; i++)
         {
-            if(familyMembers[i].GetComponent<MyHungerBar>().hungerBar.GetComponent<Image>().fillAmount < lowestHunger)
+            if(familyMembers[i].GetComponent<Hunger>().hungerValue < lowestHunger)
             {
-                lowestHunger = familyMembers[i].GetComponent<MyHungerBar>().hungerBar.GetComponent<Image>().fillAmount;
+                lowestHunger = familyMembers[i].GetComponent<Hunger>().hungerValue;
                 chooseMember = i;
             }
         }
@@ -35,14 +34,14 @@ public class WaffleManager : MonoBehaviour
         waffle = null;
     }
 
-    //void CheckHunger()
-    //{
-    //    for (int i = 0; i < familyMembers.Count; i++)
-    //    {
-    //        if (familyMembers[i].GetComponent<MyHungerBar>().hungerBar.GetComponent<Image>().fillAmount <= 1.5f)
-    //        {
-    //            familyMembers.Remove(familyMembers[i]);
-    //        }
-    //    }
-    //}
+    void CheckHunger()
+    {
+        for (int i = 0; i < familyMembers.Count; i++)
+        {
+            if (familyMembers[i].GetComponent<Hunger>().hungerValue <= 0)
+            {
+                familyMembers.Remove(familyMembers[i]);
+            }
+        }
+    }
 }
