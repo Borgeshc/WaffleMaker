@@ -33,7 +33,7 @@ public class WaffleTimer : MonoBehaviour {
 	void Update () {
         //print("Cooking: " + cooking);
         //print("Time: " + time);
-        if (ArduinoSerial.isPressed)
+        if (ArduinoSerial.isPressed || Input.GetKey(KeyCode.Space))
         {
 
             if(currentWaffle == null)
